@@ -67,6 +67,18 @@
     <Filter Include="FrameWork\GameEvent">
       <UniqueIdentifier>{d1911068-58c6-4da3-9516-415c40175f80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Player">
+      <UniqueIdentifier>{1a5ae714-143c-4dce-92fb-124a4e409824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Enemy">
+      <UniqueIdentifier>{e99a3a26-a803-40e6-a691-514142a7623d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\NPC">
+      <UniqueIdentifier>{eaa613d4-9661-4318-933c-cb068e26801b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\BackGround">
+      <UniqueIdentifier>{4bdb83e6-c055-4dcd-a5a0-346cc9d3e584}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -141,14 +153,23 @@
     <ClInclude Include="Animation.h">
       <Filter>FrameWork\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>MainGame\Object</Filter>
-    </ClInclude>
     <ClInclude Include="GameEvent.h">
       <Filter>FrameWork\GameEvent</Filter>
     </ClInclude>
     <ClInclude Include="GameEventManager.h">
       <Filter>FrameWork\GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>MainGame\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>MainGame\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MainGame\Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>MainGame\Object\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,14 +233,23 @@
     <ClCompile Include="Animation.cpp">
       <Filter>FrameWork\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>MainGame\Object</Filter>
-    </ClCompile>
     <ClCompile Include="GameEvent.cpp">
       <Filter>FrameWork\GameEvent</Filter>
     </ClCompile>
     <ClCompile Include="GameEventManager.cpp">
       <Filter>FrameWork\GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>MainGame\Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>MainGame\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MainGame\Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>MainGame\Object\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

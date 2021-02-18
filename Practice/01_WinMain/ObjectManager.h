@@ -10,8 +10,9 @@ enum class ObjectLayer : int
 {
 	Background = 0, 
 	Player = 1,
-	Enemey = 2,
-	UI = 3,
+	Enemy = 2,
+	NPC=3,
+	UI = 4,
 	End
 };
 

@@ -1,29 +1,39 @@
 #include "pch.h"
 #include "Scene1.h"
 
+#include "BackGround.h"
 #include "Player.h"
+#include  "Enemy.h"
+#include "NPC.h"
 #include "Camera.h"
 #include "GameEvent.h"
+
 void Scene1::Init()
 {
+	BackGround* backGround = new BackGround("BackGround", 0,0);
+	ObjectManager::GetInstance()->AddObject(ObjectLayer::Background, backGround);
+
 	Player* player1 = new Player("1", 100, WINSIZEY / 2);
-	Player* player2 = new Player("2", WINSIZEX - 100, WINSIZEY / 2);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, player1);
-	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, player2);
-	
-	Camera* camera = new Camera();
-	camera->SetX(100);
-	camera->SetY(WINSIZEY / 2);
-	camera->SetTarget(player1);
-	CameraManager::GetInstance()->SetMainCamera(camera);
-	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player,camera);
+
+	Enemy* enemy[5];
+	for (int i = 0; i < 5; i++) {
+		enemy[i] = new Enemy("enemy" + to_string(i+1), Random::GetInstance()->RandomInt(WINSIZEX), Random::GetInstance()->RandomInt(WINSIZEY));
+		ObjectManager::GetInstance()->AddObject(ObjectLayer::Enemy, enemy[i]);
+	}
+
+
+	Camera* mCamera = new Camera();
+	mCamera->SetTarget(player1);
+	CameraManager::GetInstance()->SetMainCamera(mCamera);
+	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, mCamera);
 
 	ObjectManager::GetInstance()->Init();
 
-	GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
-	GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player2));
-	GameEventManager::GetInstance()->PushEvent(new IDelayEvent(3.0f));
-	GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player1));
+	//GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
+	//GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player2));
+	//GameEventManager::GetInstance()->PushEvent(new IDelayEvent(3.0f));
+	//GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player1));
 }
 
 void Scene1::Release()

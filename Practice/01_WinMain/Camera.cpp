@@ -44,6 +44,15 @@ void Camera::Update()
 		mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 		break;
 	}
+
+
+	if (mRect.left < 0) { mX = mSizeX / 2 ; }
+	if (mRect.top < 0) { mY = mSizeY / 2; }
+	if (mRect.right > 2400) { mX = 2400 - (mSizeX / 2); }
+	if (mRect.bottom > 1600) { mY = 1600 - (mSizeY / 2); }
+
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+
 }
 
 void Camera::Render(HDC hdc)
