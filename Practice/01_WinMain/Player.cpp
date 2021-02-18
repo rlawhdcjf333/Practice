@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+
 Player::Player(const string& name, float x, float y)
 	:GameObject(name)
 {
@@ -92,6 +93,7 @@ void Player::Update()
 
 		float dtime = Time::GetInstance()->DeltaTime();
 		mX += dtime * 200.f;
+
 	}
 
 	if (mCurrentAnm == mRightWalkAnm and Input::GetInstance()->GetKeyUp('D'))
@@ -100,7 +102,7 @@ void Player::Update()
 		if (Input::GetInstance()->GetKey('A')) {
 			mCurrentAnm = mLeftWalkAnm;
 		}
-		else mCurrentAnm = mRightIdleAnm;
+		else if(!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S')) mCurrentAnm = mRightIdleAnm;
 		mCurrentAnm->Play();
 	}
 
@@ -123,7 +125,7 @@ void Player::Update()
 		if (Input::GetInstance()->GetKey('D')) {
 			mCurrentAnm = mRightWalkAnm;
 		}
-		else mCurrentAnm = mLeftIdleAnm;
+		else if (!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S'))mCurrentAnm = mLeftIdleAnm;
 		mCurrentAnm->Play();
 	}
 
@@ -140,21 +142,24 @@ void Player::Update()
 
 	}
 
-	if ((mCurrentAnm==mLeftWalkAnm or mCurrentAnm==mRightWalkAnm) and Input::GetInstance()->GetKey('W')) {
+	if (Input::GetInstance()->GetKey('W')) {
 
 		float dtime = Time::GetInstance()->DeltaTime();
 		mY -= dtime * 200.f;
 	}
 
-	if (Input::GetInstance()->GetKeyUp('W'))
+	if ((mCurrentAnm==mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('W'))
 	{
+		if (Input::GetInstance()->GetKey('S')) { return; }
 		mCurrentAnm->Stop();
 
 		if(mCurrentAnm==mLeftWalkAnm)
 			mCurrentAnm = mLeftIdleAnm;
 		else if (mCurrentAnm == mRightWalkAnm)
 			mCurrentAnm = mRightIdleAnm;
-
+	
+		if (Input::GetInstance()->GetKey('A')) {mCurrentAnm = mLeftWalkAnm;}
+		if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm;}
 		mCurrentAnm->Play();
 	}
 
@@ -178,14 +183,19 @@ void Player::Update()
 		mY += dtime * 200.f;
 	}
 
-	if (Input::GetInstance()->GetKeyUp('S'))
+	if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('S'))
 	{
+
+		if (Input::GetInstance()->GetKey('W')) { return; }
 		mCurrentAnm->Stop();
 
 		if (mCurrentAnm == mLeftWalkAnm)
 			mCurrentAnm = mLeftIdleAnm;
 		if (mCurrentAnm == mRightWalkAnm)
 			mCurrentAnm = mRightIdleAnm;
+
+		if (Input::GetInstance()->GetKey('A')) { mCurrentAnm = mLeftWalkAnm; }
+		if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm; }
 
 		mCurrentAnm->Play();
 	}

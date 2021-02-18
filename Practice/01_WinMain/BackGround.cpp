@@ -12,7 +12,7 @@ BackGround::BackGround(const string& name, float x, float y)
 
 void BackGround::Init()
 {
-	IMAGEMANAGER->LoadFromFile(L"BackGround", Resources(L"BackGround.bmp"), 1200, 800, false);
+	IMAGEMANAGER->LoadFromFile(L"BackGround", Resources(L"BackGround.bmp"), 936, 624, false);
 	mImage = IMAGEMANAGER->FindImage(L"BackGround");
 
 }

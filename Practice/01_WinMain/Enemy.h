@@ -1,12 +1,25 @@
 #pragma once
 #include "GameObject.h"
+class Animation;
+class Player;
 
 class Enemy : public GameObject
 {
-	class Image* mImage;
-	class Animation* mIdleAnimation;
-	class Animation* mRunAnimation;
-	class Animation* mCurrentAnimation;	//현재 애니메이션
+	Image* mImage;
+
+	map <wstring, Animation*> mAnimationList;
+
+	typedef map<wstring, Animation*> ::iterator ListIter;
+	
+	Player* mPlayer;
+
+	float mDistance;
+
+	Animation* mCurrentAnm;
+
+	float mSpeed;
+
+
 public:
 	Enemy(const string& name, float x, float y);
 
@@ -14,6 +27,8 @@ public:
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;
+
+	void SetPlayer(Player* p_Player) { mPlayer = p_Player; }
 
 };
 

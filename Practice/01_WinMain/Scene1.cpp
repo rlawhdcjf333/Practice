@@ -13,12 +13,13 @@ void Scene1::Init()
 	BackGround* backGround = new BackGround("BackGround", 0,0);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Background, backGround);
 
-	Player* player1 = new Player("1", 100, WINSIZEY / 2);
+	Player* player1 = new Player("1", 400, 700);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, player1);
 
 	Enemy* enemy[5];
 	for (int i = 0; i < 5; i++) {
-		enemy[i] = new Enemy("enemy" + to_string(i+1), Random::GetInstance()->RandomInt(WINSIZEX), Random::GetInstance()->RandomInt(WINSIZEY));
+		enemy[i] = new Enemy("enemy" + to_string(i+1), Random::GetInstance()->RandomInt(1000, 2200), Random::GetInstance()->RandomInt(1400));
+		enemy[i]->SetPlayer(player1);
 		ObjectManager::GetInstance()->AddObject(ObjectLayer::Enemy, enemy[i]);
 	}
 
