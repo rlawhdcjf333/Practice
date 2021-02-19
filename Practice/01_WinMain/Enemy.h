@@ -19,7 +19,6 @@ class Enemy : public GameObject
 
 	float mSpeed;
 	bool isDeath;
-
 public:
 	Enemy(const string& name, float x, float y);
 
@@ -29,6 +28,5 @@ public:
 	void Render(HDC hdc)override;
 
 	void SetPlayer(Player* p_Player) { mPlayer = p_Player; }
-
 };
 

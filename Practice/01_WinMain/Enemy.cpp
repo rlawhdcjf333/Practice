@@ -122,6 +122,14 @@ void Enemy::Update()
 		isDeath = true;
 	}
 
+	//공격Rect
+	if (mCurrentAnm->GetNowFrameY() == 7 && (mCurrentAnm->GetNowFrameX() > 0 && mCurrentAnm->GetNowFrameX() < 4))	//왼쪽공격
+		mAttackRect = RectMakeCenter(mHitBox.left - 40, mY + 40, 60, 50);
+	else if (mCurrentAnm->GetNowFrameY() == 6 && (mCurrentAnm->GetNowFrameX() > 7 && mCurrentAnm->GetNowFrameX() < 11)) //오른쪽공격
+		mAttackRect = RectMakeCenter(mHitBox.right + 40, mY + 40, 60, 50);
+	else
+		mAttackRect = RectMakeCenter(0, 0, 0, 0);
+
 	if (isDeath)
 	{
 		if (mCurrentAnm == mAnimationList.find(L"LeftDeath")->second)
@@ -157,7 +165,6 @@ void Enemy::Update()
 				mCurrentAnm->Play();
 
 			}
-
 			return;
 		}
 
@@ -180,7 +187,6 @@ void Enemy::Update()
 				mCurrentAnm->Play();
 
 			}
-
 		}
 
 		if (mCurrentAnm == mAnimationList.find(L"LeftAttack")->second or mCurrentAnm == mAnimationList.find(L"RightAttack")->second) {
@@ -232,12 +238,12 @@ void Enemy::Update()
 
 
 
-
 }
 
 void Enemy::Render(HDC hdc)
 {
 	CameraManager::GetInstance()->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnm->GetNowFrameX(),
 		mCurrentAnm->GetNowFrameY(), 150, 132);
+	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mAttackRect);
 	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mHitBox);
 }
