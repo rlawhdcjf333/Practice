@@ -75,7 +75,7 @@ void ObjectManager::Render(HDC hdc)
 	}
 }
 
-void ObjectManager::Collision()
+void ObjectManager::Collision()	//충돌 prototype
 {
 	Player* mPlayer = (Player*)FindObject("player");
 	RECT mPA = mPlayer->GetAttackRect();//pa는 플레이어 어택이라는 뜻

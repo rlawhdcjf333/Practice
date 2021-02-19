@@ -121,6 +121,20 @@ void Enemy::Update()
 		//체력을 추가하면 여기에 조건을 걸고?
 		isDeath = true;
 	}
+
+	if (isDeath)
+	{
+		if (mCurrentAnm == mAnimationList.find(L"LeftDeath")->second)
+		{
+			if(mCurrentAnm->GetNowFrameX() == 0)
+				GameObject::SetIsDestroy(true);
+		}
+		else if (mCurrentAnm == mAnimationList.find(L"RightDeath")->second)
+		{
+			if (mCurrentAnm->GetNowFrameX() == 14)
+				GameObject::SetIsDestroy(true);
+		}
+	}
 	if (!isDeath)
 	{
 

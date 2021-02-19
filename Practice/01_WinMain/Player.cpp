@@ -276,7 +276,6 @@ void Player::Render(HDC hdc)
 {
 	CameraManager::GetInstance()->GetMainCamera()->FrameRender(hdc, mImage, mRect.left, mRect.top,mCurrentAnm->GetNowFrameX(),
 			mCurrentAnm->GetNowFrameY());
-
 	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mAttackRect);
 
 	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnm->GetNowFrameX(),mCurrentAnm->GetNowFrameY());
