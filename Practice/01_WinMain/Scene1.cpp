@@ -31,10 +31,7 @@ void Scene1::Init()
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, mCamera);
 
 	ObjectManager::GetInstance()->Init();
-
-	
-	//GameEventManager::GetInstance()->PushEvent(new IDelayEvent(3.0f));
-	//GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player1));
+	EventCount = 0;
 }
 
 void Scene1::Release()
@@ -49,6 +46,10 @@ void Scene1::Update()
 
 	vector<GameObject*>mEL = ObjectManager::GetInstance()->GetObjectList(ObjectLayer::Enemy);
 	if (mEL.size() == 0)
+	{
+		EventCount++;	//개선필요
+	}
+	if (EventCount == 1)
 	{
 		GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
 		GameEventManager::GetInstance()->PushEvent(new EndEvent(ObjectManager::GetInstance()->FindObject("npc"),

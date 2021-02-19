@@ -3,7 +3,7 @@
 class Scene1 : public Scene
 {
 	class NPC* npc;
-
+	int EventCount;
 public:
 	void Init()override;
 	void Release()override;

@@ -67,7 +67,7 @@ void Player::Init()
 	mSizeX = mImage->GetFrameWidth();
 	mSizeY = mImage->GetFrameHeight();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
-	mHitBox = mRect;
+	mHitBox = RectMakeCenter(mX, mY, 50, 100);
 	mAttackRect = RectMakeCenter(0,0,0,0);
 	isDeath = false;
 }
@@ -252,11 +252,20 @@ void Player::Update()
 
 		}
 	}
+	else if (GameEventManager::GetInstance()->IsPlaying())
+	{
+		mCurrentAnm->Stop();
+		if (mCurrentAnm->GetNowFrameY() % 2 == 1)
+			mCurrentAnm = mRightIdleAnm;
+		else if (mCurrentAnm->GetNowFrameY() % 2 == 0)	//오른쪽이면
+			mCurrentAnm = mLeftIdleAnm;
+		mCurrentAnm->Play();
+	}
 	
 	if (!isDeath && ObjectManager::GetInstance()->IsCollision(ObjectLayer::Player,mHitBox))
 	{
 		//체력을 만들면 바로 isDeath를 true로 바꾸는게 아니라 Hp가 0이 되면 바꿈
-		isDeath = true;
+		//isDeath = true;
 
 		if (isDeath)
 		{
@@ -273,9 +282,9 @@ void Player::Update()
 	if (mRect.top < 0) { mY = mSizeY / 2; }
 	if (mRect.right > 2400) { mX = 2400 - (mSizeX / 2); }
 	if (mRect.bottom > 1600) { mY = 1600 - (mSizeY / 2); }
-	mHitBox = mRect;
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mHitBox = RectMakeCenter(mX, mY, 50, 100);
 	if (mCurrentAnm == mLeftAttackAnm && mCurrentAnm->GetNowFrameX()>2 &&mCurrentAnm->GetNowFrameX()<6)
 		mAttackRect = RectMakeCenter(mX - 40, mY, 60, 50);
 	else if (mCurrentAnm == mRightAttackAnm && mCurrentAnm->GetNowFrameX() > 2 && mCurrentAnm->GetNowFrameX() < 6)
@@ -291,6 +300,6 @@ void Player::Render(HDC hdc)
 	CameraManager::GetInstance()->GetMainCamera()->FrameRender(hdc, mImage, mRect.left, mRect.top,mCurrentAnm->GetNowFrameX(),
 			mCurrentAnm->GetNowFrameY());
 	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mAttackRect);
-
+	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mHitBox);
 	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnm->GetNowFrameX(),mCurrentAnm->GetNowFrameY());
 }

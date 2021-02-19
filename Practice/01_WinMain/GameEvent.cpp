@@ -51,15 +51,15 @@ void EndEvent::Start()
 {
 	mNpc->SetY(-100);
 
-	if (mPlayer->GetX() - 400 < 0)
+	if (mPlayer->GetX()-CameraX- 400 < 0)
 	{
-		mNpc->SetX(mPlayer->GetX() + 400);
+		mNpc->SetX(mPlayer->GetX()-CameraX + 400);
 		NPC* temp = (NPC*)mNpc;
 		temp->SetCurrentAnm(temp->GetAnimation(true));
 	}
 	else
 	{
-		mNpc->SetX(mPlayer->GetX() - 400);
+		mNpc->SetX(mPlayer->GetX()- CameraX - 400);
 		NPC* temp = (NPC*)mNpc;
 		temp->SetCurrentAnm(temp->GetAnimation(false));
 	}
@@ -67,10 +67,12 @@ void EndEvent::Start()
 
 bool EndEvent::Update()
 {
-	mNpc->SetY(mNpc->GetY() + 1);
-	if (mNpc->GetY() >= mPlayer->GetY())
+	float dtime = Time::GetInstance()->DeltaTime();
+	mNpc->SetY(mNpc->GetY() + dtime * 100.f);
+
+	if (mNpc->GetY() >= mPlayer->GetY()-CameraY)
 	{
-		mNpc->SetY(mPlayer->GetY());
+		mNpc->SetY(mPlayer->GetY()-CameraY);
 		return true;
 	}
 
@@ -81,6 +83,5 @@ EndEvent::EndEvent(GameObject * target1, GameObject * target2)
 {
 	mNpc = target1;
 	mPlayer = target2;
-
 
 }
