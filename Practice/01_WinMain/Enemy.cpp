@@ -76,7 +76,7 @@ void Enemy::Init()
 	mCurrentAnm->Play();
 
 	mSpeed = Random::GetInstance()->RandomInt(1,150);
-
+	isDeath = false;
 	  
 }
 
@@ -104,91 +104,101 @@ void Enemy::Update()
 	mDistance = Math::GetDistance(mX, mY, playerX , playerY);
 
 	ListIter iter;
+	if (!isDeath)
+	{
+		if (mDistance > 1000) {
 
-	if (mDistance > 1000) {
+			if (mX > playerX) {
+				iter = mAnimationList.find(L"LeftIdle");
 
-		if (mX > playerX) {
-			iter = mAnimationList.find(L"LeftIdle");
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
 
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
+			}
 
-		}
+			else {
+				iter = mAnimationList.find(L"RightIdle");
 
-		else {
-			iter = mAnimationList.find(L"RightIdle");
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
 
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
-
-		}
+			}
 		
-		return;
-	}
+			return;
+		}
 
 
-	if (mDistance <= mSizeX / 2) {
+		if (mDistance <= mSizeX / 2) {
 
-		if (mX > playerX) {
+			if (mX > playerX) {
 
-			iter = mAnimationList.find(L"LeftAttack");
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
+				iter = mAnimationList.find(L"LeftAttack");
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
 			
 
-		}
-		else {
-			iter = mAnimationList.find(L"RightAttack");
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
+			}
+			else {
+				iter = mAnimationList.find(L"RightAttack");
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
 		
-		}
-
-	}
-
-	if (mCurrentAnm == mAnimationList.find(L"LeftAttack")->second or mCurrentAnm == mAnimationList.find(L"RightAttack")->second) {
-
-		if (mCurrentAnm->GetIsPlay()) { return; }
-	}
-
-
-	if (mDistance > mSizeX / 2) {
-		if (mX > playerX) {
-
-			iter = mAnimationList.find(L"LeftWalk");
-
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
-
-			mX -= dtime * 150.f;
-
-			if (mY > playerY) mY -= dtime * mSpeed;
-			else if (mY < playerY) mY += dtime * mSpeed;
-		}
-		else {
-
-			iter = mAnimationList.find(L"RightWalk");
-
-			if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
-			mCurrentAnm = iter->second;
-			mCurrentAnm->Play();
-
-			mX += dtime * 150.f;
-
-			if (mY > playerY) mY -= dtime * mSpeed;
-			else if (mY < playerY) mY += dtime * mSpeed;
+			}
 
 		}
+
+		if (mCurrentAnm == mAnimationList.find(L"LeftAttack")->second or mCurrentAnm == mAnimationList.find(L"RightAttack")->second) {
+
+			if (mCurrentAnm->GetIsPlay()) { return; }
+		}
+
+
+		if (mDistance > mSizeX / 2) {
+			if (mX > playerX) {
+
+				iter = mAnimationList.find(L"LeftWalk");
+
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
+
+				mX -= dtime * 150.f;
+
+				if (mY > playerY) mY -= dtime * mSpeed;
+				else if (mY < playerY) mY += dtime * mSpeed;
+			}
+			else {
+
+				iter = mAnimationList.find(L"RightWalk");
+
+				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
+				mCurrentAnm = iter->second;
+				mCurrentAnm->Play();
+
+				mX += dtime * 150.f;
+
+				if (mY > playerY) mY -= dtime * mSpeed;
+				else if (mY < playerY) mY += dtime * mSpeed;
+
+			}
+		}
 	}
 
-	
-
-
+	if (ObjectManager::GetInstance()->IsCollision(mHitBox))
+	{
+		mCurrentAnm->Stop();
+		if (mCurrentAnm->GetNowFrameY() == 3 || mCurrentAnm->GetNowFrameY() == 4 || mCurrentAnm->GetNowFrameY() == 7)
+			mCurrentAnm = mAnimationList.find(L"LeftDeath")->second;
+		else if (mCurrentAnm->GetNowFrameY() == 0 || mCurrentAnm->GetNowFrameY() == 1 || mCurrentAnm->GetNowFrameY() == 6)
+			mCurrentAnm = mAnimationList.find(L"RightDeath")->second;
+		mCurrentAnm->Play();
+		//체력을 추가하면 여기에 조건을 걸고?
+		isDeath = true;
+	}
 	
 	if (mRect.left < 0) { mX = mSizeX / 2; }
 	if (mRect.top < 0) { mY = mSizeY / 2; }
@@ -199,6 +209,7 @@ void Enemy::Update()
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mHitBox = RectMakeCenter(mX + 20, mY + 50, mSizeX - 30, mSizeY + 40);
 	
+
 
 
 }
