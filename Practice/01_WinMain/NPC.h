@@ -7,6 +7,9 @@ class NPC : public GameObject
 	class Animation* mIdleAnimation;
 	class Animation* mRunAnimation;
 	class Animation* mCurrentAnimation;	//현재 애니메이션
+
+	Animation* mLeftIdleAnm;
+	Animation* mRIghtIdleAnm;
 public:
 	NPC(const string& name, float x, float y);
 
