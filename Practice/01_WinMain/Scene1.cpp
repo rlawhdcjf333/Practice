@@ -22,7 +22,7 @@ void Scene1::Init()
 		enemy[i]->SetPlayer(player1);
 		ObjectManager::GetInstance()->AddObject(ObjectLayer::Enemy, enemy[i]);
 	}
-	npc = new NPC("npc", 0, 0);
+	npc = new NPC("npc", 0, -500);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::NPC, npc);
 
 	Camera* mCamera = new Camera();
@@ -51,7 +51,8 @@ void Scene1::Update()
 	if (mEL.size() == 0)
 	{
 		GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
-		
+		GameEventManager::GetInstance()->PushEvent(new EndEvent(ObjectManager::GetInstance()->FindObject("npc"),
+			ObjectManager::GetInstance()->FindObject("player")));
 	}
 }
 

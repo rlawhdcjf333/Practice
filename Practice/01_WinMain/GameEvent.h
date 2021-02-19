@@ -12,7 +12,14 @@ public:
 
 class EndEvent : public IEvent
 {
-
+	class GameObject* mNpc;
+	class GameObject* mPlayer;
+	float mX;
+	float mY;
+public:
+	void Start()override;
+	bool Update()override;
+	EndEvent(class GameObject* target1, class GameObject* target2);
 };
 
 class IChangeCameraTargetEvent : public IEvent

@@ -2,6 +2,7 @@
 #include "NPC.h"
 #include "Animation.h"
 #include "Image.h"
+#include "GameEventManager.h"
 
 NPC::NPC(const string& name, float x, float y)
 {
@@ -31,7 +32,8 @@ void NPC::Init()
 
 void NPC::Release()
 { 
-
+	SafeDelete(mLeftIdleAnm);
+	SafeDelete(mRIghtIdleAnm)
 }
 
 void NPC::Update()
@@ -41,6 +43,9 @@ void NPC::Update()
 
 void NPC::Render(HDC hdc)
 {
-	mImage->FrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(),
-		mCurrentAnimation->GetNowFrameY());
+	if (GameEventManager::GetInstance()->IsPlaying())
+	{
+		mImage->FrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(),
+			mCurrentAnimation->GetNowFrameY());
+	}
 }
