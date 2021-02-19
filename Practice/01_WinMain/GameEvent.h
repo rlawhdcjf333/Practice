@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Camera.h"
 //interface class : 순수가상함수만을 가지고 있는 클래스
 class IEvent
 {
@@ -14,8 +14,9 @@ class EndEvent : public IEvent
 {
 	class GameObject* mNpc;
 	class GameObject* mPlayer;
-	float mX;
-	float mY;
+	float CameraX = CameraManager::GetInstance()->GetMainCamera()->GetRect().left;
+	float CameraY = CameraManager::GetInstance()->GetMainCamera()->GetRect().top;
+
 public:
 	void Start()override;
 	bool Update()override;

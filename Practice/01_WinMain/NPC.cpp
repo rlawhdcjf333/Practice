@@ -5,6 +5,7 @@
 #include "GameEventManager.h"
 
 NPC::NPC(const string& name, float x, float y)
+	:GameObject(name)
 {
 	mX = x;
 	mY = y;

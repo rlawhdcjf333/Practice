@@ -256,7 +256,7 @@ void Player::Update()
 	if (!isDeath && ObjectManager::GetInstance()->IsCollision(ObjectLayer::Player,mHitBox))
 	{
 		//체력을 만들면 바로 isDeath를 true로 바꾸는게 아니라 Hp가 0이 되면 바꿈
-		isDeath = true;
+		//isDeath = true;
 
 		if (isDeath)
 		{
