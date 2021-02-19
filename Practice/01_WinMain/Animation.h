@@ -28,6 +28,7 @@ public:
 
 	void Play();
 	void Stop();
+	void ReverseStop();
 	void Pause();
 
 	void InitFrameByVector(const vector<pair<int, int>>& frameList);

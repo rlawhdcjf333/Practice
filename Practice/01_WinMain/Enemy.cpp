@@ -19,13 +19,13 @@ void Enemy::Init()
 
 	Animation* p_Tmp = new Animation();
 	p_Tmp->InitFrameByStartEnd(0, 0, 11, 0, true);
-	p_Tmp->	SetIsLoop(true);
-	p_Tmp->	SetFrameUpdateTime(0.2f);
+	p_Tmp->SetIsLoop(true);
+	p_Tmp->SetFrameUpdateTime(0.2f);
 	mAnimationList.insert(make_pair(L"LeftIdle", p_Tmp));
-	
+
 	mCurrentAnm = p_Tmp;
 
-	
+
 	p_Tmp = new Animation();
 	p_Tmp->InitFrameByStartEnd(0, 3, 11, 3, false);
 	p_Tmp->SetIsLoop(true);
@@ -58,14 +58,14 @@ void Enemy::Init()
 
 	p_Tmp = new Animation();
 	p_Tmp->InitFrameByStartEnd(0, 5, 14, 5, true);
-	p_Tmp->SetIsLoop(true);
-	p_Tmp->SetFrameUpdateTime(0.3f);
+	p_Tmp->SetIsLoop(false);
+	p_Tmp->SetFrameUpdateTime(0.1f);
 	mAnimationList.insert(make_pair(L"LeftDeath", p_Tmp));
 
 	p_Tmp = new Animation();
 	p_Tmp->InitFrameByStartEnd(0, 2, 14, 2, false);
-	p_Tmp->SetIsLoop(true);
-	p_Tmp->SetFrameUpdateTime(0.3f);
+	p_Tmp->SetIsLoop(false);
+	p_Tmp->SetFrameUpdateTime(0.1f);
 	mAnimationList.insert(make_pair(L"RightDeath", p_Tmp));
 
 	mSizeX = mImage->GetFrameWidth();
@@ -75,15 +75,15 @@ void Enemy::Init()
 	mDistance = 1500;
 	mCurrentAnm->Play();
 
-	mSpeed = Random::GetInstance()->RandomInt(1,150);
+	mSpeed = Random::GetInstance()->RandomInt(1, 150);
 	isDeath = false;
-	  
+
 }
 
 void Enemy::Release()
 {
 	ListIter iter = mAnimationList.begin();
-	for (;iter != mAnimationList.end(); ++iter) {
+	for (; iter != mAnimationList.end(); ++iter) {
 
 		SafeDelete(iter->second);
 	}
@@ -101,11 +101,29 @@ void Enemy::Update()
 	float playerX = mPlayer->GetX();
 	float playerY = mPlayer->GetY();
 
-	mDistance = Math::GetDistance(mX, mY, playerX , playerY);
+	mDistance = Math::GetDistance(mX, mY, playerX, playerY);
 
 	ListIter iter;
+
+	if (ObjectManager::GetInstance()->IsCollision(mHitBox))
+	{
+		if (mCurrentAnm->GetNowFrameY() == 3 || mCurrentAnm->GetNowFrameY() == 4 || mCurrentAnm->GetNowFrameY() == 7)	//왼쪽볼때
+		{
+			mCurrentAnm = mAnimationList.find(L"LeftDeath")->second;
+
+		}
+		else if (mCurrentAnm->GetNowFrameY() == 0 || mCurrentAnm->GetNowFrameY() == 1 || mCurrentAnm->GetNowFrameY() == 6)	//오른쪽볼때
+		{
+			mCurrentAnm->Stop();
+			mCurrentAnm = mAnimationList.find(L"RightDeath")->second;
+		}
+		mCurrentAnm->Play();
+		//체력을 추가하면 여기에 조건을 걸고?
+		isDeath = true;
+	}
 	if (!isDeath)
 	{
+
 		if (mDistance > 1000) {
 
 			if (mX > playerX) {
@@ -125,7 +143,7 @@ void Enemy::Update()
 				mCurrentAnm->Play();
 
 			}
-		
+
 			return;
 		}
 
@@ -138,7 +156,7 @@ void Enemy::Update()
 				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
 				mCurrentAnm = iter->second;
 				mCurrentAnm->Play();
-			
+
 
 			}
 			else {
@@ -146,7 +164,7 @@ void Enemy::Update()
 				if (mCurrentAnm != iter->second) mCurrentAnm->Stop();
 				mCurrentAnm = iter->second;
 				mCurrentAnm->Play();
-		
+
 			}
 
 		}
@@ -188,18 +206,7 @@ void Enemy::Update()
 		}
 	}
 
-	if (ObjectManager::GetInstance()->IsCollision(mHitBox))
-	{
-		mCurrentAnm->Stop();
-		if (mCurrentAnm->GetNowFrameY() == 3 || mCurrentAnm->GetNowFrameY() == 4 || mCurrentAnm->GetNowFrameY() == 7)
-			mCurrentAnm = mAnimationList.find(L"LeftDeath")->second;
-		else if (mCurrentAnm->GetNowFrameY() == 0 || mCurrentAnm->GetNowFrameY() == 1 || mCurrentAnm->GetNowFrameY() == 6)
-			mCurrentAnm = mAnimationList.find(L"RightDeath")->second;
-		mCurrentAnm->Play();
-		//체력을 추가하면 여기에 조건을 걸고?
-		isDeath = true;
-	}
-	
+
 	if (mRect.left < 0) { mX = mSizeX / 2; }
 	if (mRect.top < 0) { mY = mSizeY / 2; }
 	if (mRect.right > 2400) { mX = 2400 - (mSizeX / 2); }
@@ -208,7 +215,7 @@ void Enemy::Update()
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mHitBox = RectMakeCenter(mX + 20, mY + 50, mSizeX - 30, mSizeY + 40);
-	
+
 
 
 

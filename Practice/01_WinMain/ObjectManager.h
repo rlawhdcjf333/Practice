@@ -31,7 +31,7 @@ public:
 	void Render(HDC hdc);
 	void Collision();
 
-	bool IsCollision(RECT& hitbox);	//플레이어에 공격을 맞았는지 판정, 플레이어도 이걸로 쓰게할려면 인자 개조 필요
+	bool IsCollision(ObjectLayer layer,RECT &hitbox);
 
 	void AddObject(ObjectLayer layer, class GameObject* object);
 	class GameObject* FindObject(const string& name);
