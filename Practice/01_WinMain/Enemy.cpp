@@ -105,7 +105,7 @@ void Enemy::Update()
 
 	ListIter iter;
 
-	if (ObjectManager::GetInstance()->IsCollision(mHitBox))
+	if (ObjectManager::GetInstance()->IsCollision(ObjectLayer::Enemy, mHitBox))
 	{
 		if (mCurrentAnm->GetNowFrameY() == 3 || mCurrentAnm->GetNowFrameY() == 4 || mCurrentAnm->GetNowFrameY() == 7)	//¿ÞÂÊº¼¶§
 		{

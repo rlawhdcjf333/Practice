@@ -20,7 +20,6 @@ class Enemy : public GameObject
 	float mSpeed;
 	bool isDeath;
 
-	bool isDeath;
 public:
 	Enemy(const string& name, float x, float y);
 
