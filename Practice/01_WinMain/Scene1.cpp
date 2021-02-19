@@ -51,7 +51,7 @@ void Scene1::Update()
 	if (mEL.size() == 0)
 	{
 		GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
-		
+
 	}
 }
 
