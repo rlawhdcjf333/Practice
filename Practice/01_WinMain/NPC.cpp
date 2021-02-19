@@ -32,7 +32,8 @@ void NPC::Init()
 
 void NPC::Release()
 { 
-
+	SafeDelete(mLeftIdleAnm);
+	SafeDelete(mRIghtIdleAnm)
 }
 
 void NPC::Update()

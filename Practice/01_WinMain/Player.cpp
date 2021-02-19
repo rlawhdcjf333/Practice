@@ -38,7 +38,7 @@ void Player::Init()
 	mLeftDeathAnm = new Animation();
 	mLeftDeathAnm->InitFrameByStartEnd(0, 4, 5, 4, false);
 	mLeftDeathAnm->SetIsLoop(false);
-	mLeftDeathAnm->SetFrameUpdateTime(0.5f);
+	mLeftDeathAnm->SetFrameUpdateTime(0.2f);
 
 	//오른쪽 모션
 	mRightIdleAnm = new Animation();
@@ -59,7 +59,7 @@ void Player::Init()
 	mRightDeathAnm = new Animation();
 	mRightDeathAnm->InitFrameByStartEnd(0, 5, 5, 5, false);
 	mRightDeathAnm->SetIsLoop(false);
-	mRightDeathAnm->SetFrameUpdateTime(0.5f);
+	mRightDeathAnm->SetFrameUpdateTime(0.2f);
 
 
 	mCurrentAnm = mLeftIdleAnm;
@@ -69,6 +69,7 @@ void Player::Init()
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mHitBox = mRect;
 	mAttackRect = RectMakeCenter(0,0,0,0);
+	isDeath = false;
 }
 
 void Player::Release()
@@ -85,7 +86,7 @@ void Player::Release()
 
 void Player::Update()
 {
-	if (!GameEventManager::GetInstance()->IsPlaying())
+	if (!GameEventManager::GetInstance()->IsPlaying() && !isDeath)
 	{
 		if (Input::GetInstance()->GetKeyDown('D'))
 		{
@@ -233,9 +234,7 @@ void Player::Update()
 				mCurrentAnm->Stop();
 				mCurrentAnm = mLeftWalkAnm;
 				mCurrentAnm->Play();
-
 			}
-
 		}
 
 
@@ -254,6 +253,21 @@ void Player::Update()
 		}
 	}
 	
+	if (!isDeath && ObjectManager::GetInstance()->IsCollision(ObjectLayer::Player,mHitBox))
+	{
+		//체력을 만들면 바로 isDeath를 true로 바꾸는게 아니라 Hp가 0이 되면 바꿈
+		isDeath = true;
+
+		if (isDeath)
+		{
+			mCurrentAnm->Stop();
+			if (mCurrentAnm->GetNowFrameY() % 2 == 1)
+				mCurrentAnm = mRightDeathAnm;
+			else if (mCurrentAnm->GetNowFrameY() % 2 == 0)	//오른쪽이면
+				mCurrentAnm = mLeftDeathAnm;
+			mCurrentAnm->Play();
+		}
+	}
 
 	if (mRect.left < 0) { mX = mSizeX / 2; }
 	if (mRect.top < 0) { mY = mSizeY / 2; }

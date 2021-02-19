@@ -111,9 +111,9 @@ bool ObjectManager::IsCollision(ObjectLayer layer, RECT& hitbox)
 		for (int i = 0; i < mEL.size(); i++)
 		{
 			RECT mPA = mPlayer->GetHitBox();
-			RECT mEnemyRect = mEL[i]->GetHitBox();
+			RECT mEA = mEL[i]->GetAttackRect();	//enemy attack rect
 			RECT temp;
-			if (IntersectRect(&temp, &mPA, &mEnemyRect))
+			if (IntersectRect(&temp, &mPA, &mEA))
 			{
 				return true;
 			}
