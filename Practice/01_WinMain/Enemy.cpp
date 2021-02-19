@@ -124,9 +124,9 @@ void Enemy::Update()
 
 	//공격Rect
 	if (mCurrentAnm->GetNowFrameY() == 7 && (mCurrentAnm->GetNowFrameX() > 0 && mCurrentAnm->GetNowFrameX() < 4))	//왼쪽공격
-		mAttackRect = RectMakeCenter(mHitBox.left - 40, mY + 40, 60, 50);
+		mAttackRect = RectMakeCenter(mHitBox.left - 40, mY + 40, 30, 50);
 	else if (mCurrentAnm->GetNowFrameY() == 6 && (mCurrentAnm->GetNowFrameX() > 7 && mCurrentAnm->GetNowFrameX() < 11)) //오른쪽공격
-		mAttackRect = RectMakeCenter(mHitBox.right + 40, mY + 40, 60, 50);
+		mAttackRect = RectMakeCenter(mHitBox.right + 40, mY + 40, 30, 50);
 	else
 		mAttackRect = RectMakeCenter(0, 0, 0, 0);
 
@@ -235,8 +235,6 @@ void Enemy::Update()
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mHitBox = RectMakeCenter(mX + 20, mY + 50, mSizeX - 30, mSizeY + 40);
-
-
 
 }
 
