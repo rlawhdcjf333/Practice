@@ -57,7 +57,7 @@ void ObjectManager::Update()
 			}
 		}
 	}
-	Collision();
+	//Collision();
 }
 
 void ObjectManager::Render(HDC hdc)
@@ -89,6 +89,36 @@ void ObjectManager::Collision()
 		{
 			mEL[i]->SetIsDestroy(true);
 		}
+	}
+}
+
+bool ObjectManager::IsCollision(ObjectLayer layer, RECT& hitbox)
+{
+	Player* mPlayer = (Player*)FindObject("player");
+	if (layer == ObjectLayer::Enemy)
+	{
+		RECT mPA = mPlayer->GetAttackRect();//pa는 플레이어 어택이라는 뜻
+		RECT temp;
+		if (IntersectRect(&temp, &mPA, &hitbox))
+			return true;
+		return false;
+	}
+
+	if (layer == ObjectLayer::Player)
+	{
+		vector<GameObject*>mEL = GetObjectList(ObjectLayer::Enemy);//EL은 에너미 리스트라는 뜻
+
+		for (int i = 0; i < mEL.size(); i++)
+		{
+			RECT mPA = mPlayer->GetHitBox();
+			RECT mEnemyRect = mEL[i]->GetHitBox();
+			RECT temp;
+			if (IntersectRect(&temp, &mPA, &mEnemyRect))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

@@ -66,6 +66,7 @@ void Player::Init()
 	mSizeX = mImage->GetFrameWidth();
 	mSizeY = mImage->GetFrameHeight();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mHitBox = mRect;
 	mAttackRect = RectMakeCenter(0,0,0,0);
 }
 
@@ -254,7 +255,7 @@ void Player::Update()
 	if (mRect.top < 0) { mY = mSizeY / 2; }
 	if (mRect.right > 2400) { mX = 2400 - (mSizeX / 2); }
 	if (mRect.bottom > 1600) { mY = 1600 - (mSizeY / 2); }
-
+	mHitBox = mRect;
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	if (mCurrentAnm == mLeftAttackAnm && mCurrentAnm->GetNowFrameX()>2 &&mCurrentAnm->GetNowFrameX()<6)

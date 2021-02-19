@@ -31,6 +31,8 @@ public:
 	void Render(HDC hdc);
 	void Collision();
 
+	bool IsCollision(ObjectLayer layer,RECT &hitbox);
+
 	void AddObject(ObjectLayer layer, class GameObject* object);
 	class GameObject* FindObject(const string& name);
 	class GameObject* FindObject(ObjectLayer layer, const string& name);
