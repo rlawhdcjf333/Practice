@@ -28,7 +28,7 @@ void Player::Init()
 	mLeftWalkAnm = new Animation();
 	mLeftWalkAnm->InitFrameByStartEnd(0, 6, 7, 6, false);
 	mLeftWalkAnm->SetIsLoop(true);
-	mLeftWalkAnm->SetFrameUpdateTime(0.2f);
+	mLeftWalkAnm->SetFrameUpdateTime(0.1f);
 
 	mLeftAttackAnm = new Animation();
 	mLeftAttackAnm->InitFrameByStartEnd(0, 2, 8, 2, false);
@@ -49,7 +49,7 @@ void Player::Init()
 	mRightWalkAnm = new Animation();
 	mRightWalkAnm->InitFrameByStartEnd(0, 7, 7, 7, false);
 	mRightWalkAnm->SetIsLoop(true);
-	mRightWalkAnm->SetFrameUpdateTime(0.2f);
+	mRightWalkAnm->SetFrameUpdateTime(0.1f);
 
 	mRightAttackAnm = new Animation();
 	mRightAttackAnm->InitFrameByStartEnd(0, 3, 8, 3, false);

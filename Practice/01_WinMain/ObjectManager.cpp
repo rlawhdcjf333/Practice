@@ -87,9 +87,19 @@ void ObjectManager::Collision()
 		RECT temp;
 		if (IntersectRect(&temp, &mPA, &mEnemyRect))
 		{
-			mEL[i]->SetIsDestroy(true);
+			//mEL[i]->SetIsDestroy(true);
 		}
 	}
+}
+
+bool ObjectManager::IsCollision(RECT &hitbox)
+{
+	Player* mPlayer = (Player*)FindObject("player");
+	RECT mPA = mPlayer->GetAttackRect();//pa는 플레이어 어택이라는 뜻
+	RECT temp;
+	if (IntersectRect(&temp, &hitbox, &mPA))
+		return true;
+	return false;
 }
 
 void ObjectManager::AddObject(ObjectLayer layer, GameObject * object)
