@@ -197,7 +197,7 @@ void Enemy::Update()
 
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
-
+	mHitBox = RectMakeCenter(mX + 20, mY + 50, mSizeX - 30, mSizeY + 40);
 	
 
 
@@ -207,4 +207,5 @@ void Enemy::Render(HDC hdc)
 {
 	CameraManager::GetInstance()->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnm->GetNowFrameX(),
 		mCurrentAnm->GetNowFrameY(), 150, 132);
+	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mHitBox);
 }

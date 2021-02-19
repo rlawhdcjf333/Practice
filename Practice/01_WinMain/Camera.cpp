@@ -111,7 +111,7 @@ void Camera::RenderRect(HDC hdc, RECT rc)
 	rc.right -= mRect.left;
 	rc.top -= mRect.top;
 	rc.bottom -= mRect.top;
-	RenderRect(hdc, rc);
+	Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 }
 
 void Camera::RenderEllipse(HDC hdc, float x, float y, float radius)

@@ -13,7 +13,7 @@ void Scene1::Init()
 	BackGround* backGround = new BackGround("BackGround", 0,0);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Background, backGround);
 
-	Player* player1 = new Player("1", 400, 700);
+	Player* player1 = new Player("player", 400, 700);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, player1);
 
 	Enemy* enemy[5];

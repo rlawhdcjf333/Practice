@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ObjectManager.h"
-
+#include "Player.h"
 #include "GameObject.h"
 ObjectManager::ObjectManager()
 {
@@ -57,6 +57,7 @@ void ObjectManager::Update()
 			}
 		}
 	}
+	Collision();
 }
 
 void ObjectManager::Render(HDC hdc)
@@ -70,6 +71,23 @@ void ObjectManager::Render(HDC hdc)
 			{
 				iter->second[i]->Render(hdc);
 			}
+		}
+	}
+}
+
+void ObjectManager::Collision()
+{
+	Player* mPlayer = (Player*)FindObject("player");
+	RECT mPA = mPlayer->GetAttackRect();//pa는 플레이어 어택이라는 뜻
+	vector<GameObject*>mEL = GetObjectList(ObjectLayer::Enemy);//EL은 에너미 리스트라는 뜻
+	
+	for (int i = 0; i < mEL.size(); i++)
+	{
+		RECT mEnemyRect = mEL[i]->GetHitBox();
+		RECT temp;
+		if (IntersectRect(&temp, &mPA, &mEnemyRect))
+		{
+			mEL[i]->SetIsDestroy(true);
 		}
 	}
 }

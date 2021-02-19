@@ -66,6 +66,7 @@ void Player::Init()
 	mSizeX = mImage->GetFrameWidth();
 	mSizeY = mImage->GetFrameHeight();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mAttackRect = RectMakeCenter(0,0,0,0);
 }
 
 void Player::Release()
@@ -247,6 +248,7 @@ void Player::Update()
 		}
 
 	}
+	
 
 	if (mRect.left < 0) { mX = mSizeX / 2; }
 	if (mRect.top < 0) { mY = mSizeY / 2; }
@@ -255,6 +257,12 @@ void Player::Update()
 
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	if (mCurrentAnm == mLeftAttackAnm && mCurrentAnm->GetNowFrameX()>2 &&mCurrentAnm->GetNowFrameX()<6)
+		mAttackRect = RectMakeCenter(mX - 40, mY, 60, 50);
+	else if (mCurrentAnm == mRightAttackAnm && mCurrentAnm->GetNowFrameX() > 2 && mCurrentAnm->GetNowFrameX() < 6)
+		mAttackRect = RectMakeCenter(mX + 40, mY, 60, 50);
+	else
+		mAttackRect = RectMakeCenter(0,0,0,0);
 
 	mCurrentAnm->Update();
 }
@@ -263,6 +271,8 @@ void Player::Render(HDC hdc)
 {
 	CameraManager::GetInstance()->GetMainCamera()->FrameRender(hdc, mImage, mRect.left, mRect.top,mCurrentAnm->GetNowFrameX(),
 			mCurrentAnm->GetNowFrameY());
+
+	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mAttackRect);
 
 	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnm->GetNowFrameX(),mCurrentAnm->GetNowFrameY());
 }

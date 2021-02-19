@@ -29,6 +29,7 @@ public:
 	void Release();
 	void Update();
 	void Render(HDC hdc);
+	void Collision();
 
 	void AddObject(ObjectLayer layer, class GameObject* object);
 	class GameObject* FindObject(const string& name);

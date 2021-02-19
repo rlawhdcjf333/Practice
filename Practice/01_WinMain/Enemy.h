@@ -19,7 +19,6 @@ class Enemy : public GameObject
 
 	float mSpeed;
 
-
 public:
 	Enemy(const string& name, float x, float y);
 
