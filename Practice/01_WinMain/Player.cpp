@@ -5,17 +5,26 @@
 #include "Animation.h"
 #include "Camera.h"
 
+#include "Enemy.h"
 Player::Player(const string& name, float x, float y)
 	:GameObject(name)
 {
 	mX = x;
 	mY = y;
+	mHP = 3;
 }
 
 void Player::Init()
 {
 	IMAGEMANAGER->LoadFromFile(L"Player", Resources(L"Player.bmp"), 1215, 1080, 9, 8,true);
 	mImage = IMAGEMANAGER->FindImage(L"Player");
+
+	//HP UI
+	mHeart = new Animation();
+	mHeart->InitFrameByStartEnd(0,0,0,0, false);
+	mHeart->SetIsLoop(false);
+	mHeart->SetFrameUpdateTime(1.f);
+
 
 	//왼쪽 모션
 	mLeftIdleAnm = new Animation();
@@ -78,10 +87,12 @@ void Player::Release()
 	SafeDelete(mRightWalkAnm);
 	SafeDelete(mRightAttackAnm);
 	SafeDelete(mRightDeathAnm);
+	SafeDelete(mHeart);
 }
 
 void Player::Update()
 {
+	//이동 및 이동 모션
 	if (Input::GetInstance()->GetKeyDown('D'))
 	{
 		mCurrentAnm->Stop();
@@ -218,7 +229,8 @@ void Player::Update()
 		mCurrentAnm->Play();
 
 	}
-
+	
+	//이동 모션
 	if (mCurrentAnm == mLeftAttackAnm and mCurrentAnm->GetNowFrameX() == 7) {
 
 		 mCurrentAnm = mLeftIdleAnm;
@@ -246,6 +258,27 @@ void Player::Update()
 			mCurrentAnm->Play();
 		}
 
+	}
+
+	//피격 판정
+	//if ()
+
+	//사망 모션
+	if (mHP <= 0)
+	{
+		if (mLeftIdleAnm || mLeftAttackAnm || mLeftWalkAnm)
+		{
+			mCurrentAnm->Stop();
+			mCurrentAnm = mLeftDeathAnm;
+			mCurrentAnm->Play();
+		}
+
+		if (mRightIdleAnm || mRightAttackAnm || mRightWalkAnm)
+		{
+			mCurrentAnm->Stop();
+			mCurrentAnm = mRightDeathAnm;
+			mCurrentAnm->Play();
+		}
 	}
 
 	if (mRect.left < 0) { mX = mSizeX / 2; }

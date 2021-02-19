@@ -18,6 +18,12 @@ class Player : public GameObject
 
 	Animation* mCurrentAnm;
 
+	Animation* mHeart;		//
+
+	//RECT mRect;
+	int mHP;
+	float mAtk;
+
 public:
 	Player(const string& name,float x, float y);
 
