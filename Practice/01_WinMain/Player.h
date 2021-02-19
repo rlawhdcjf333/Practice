@@ -18,12 +18,7 @@ class Player : public GameObject
 
 	Animation* mCurrentAnm;
 
-	Animation* mHeart;		//
-
-	//RECT mRect;
-	int mHP;
-	float mAtk;
-
+	RECT mAttackRect;
 public:
 	Player(const string& name,float x, float y);
 
@@ -31,5 +26,6 @@ public:
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;
+	RECT GetAttackRect() { return mAttackRect; }
 };
 

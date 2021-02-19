@@ -69,15 +69,15 @@ void MainGame::Render(HDC hdc)
 
 void MainGame::RenderTime(HDC hdc)
 {
-	float worldTime = Time::GetInstance()->GetWorldTime();
-	float deltaTime = Time::GetInstance()->DeltaTime();
-	ULONG fps = Time::GetInstance()->GetmFrameRate();
-	wstring strWorldTime = L"WorldTime : " + to_wstring(worldTime);
-	wstring strDeltaTime = L"DeltaTime : " + to_wstring(deltaTime);
-	wstring strFPS = L"FPS : " + to_wstring(fps);
-
-	TextOut(hdc, 10, 10, strWorldTime.c_str(), strWorldTime.length());
-	TextOut(hdc, 10, 25, strDeltaTime.c_str(), strDeltaTime.length());
-	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
+	//float worldTime = Time::GetInstance()->GetWorldTime();
+	//float deltaTime = Time::GetInstance()->DeltaTime();
+	//ULONG fps = Time::GetInstance()->GetmFrameRate();
+	//wstring strWorldTime = L"WorldTime : " + to_wstring(worldTime);
+	//wstring strDeltaTime = L"DeltaTime : " + to_wstring(deltaTime);
+	//wstring strFPS = L"FPS : " + to_wstring(fps);
+	//
+	//TextOut(hdc, 10, 10, strWorldTime.c_str(), strWorldTime.length());
+	//TextOut(hdc, 10, 25, strDeltaTime.c_str(), strDeltaTime.length());
+	//TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
 }
 

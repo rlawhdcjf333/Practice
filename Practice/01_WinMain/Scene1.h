@@ -2,6 +2,8 @@
 #include "Scene.h"
 class Scene1 : public Scene
 {
+	class NPC* npc;
+
 public:
 	void Init()override;
 	void Release()override;

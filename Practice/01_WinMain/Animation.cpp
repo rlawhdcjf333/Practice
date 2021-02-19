@@ -56,6 +56,13 @@ void Animation::Stop()
 	mCurrentFrameTime = 0.f;
 }
 
+void Animation::ReverseStop()
+{
+	mIsPlay = false;
+	//mCurrentFrameIndex = 끝프레임;
+	mCurrentFrameTime = 0.f;
+}
+
 void Animation::Pause()
 {
 	mIsPlay = false;
@@ -67,13 +74,16 @@ void Animation::InitFrameByVector(const vector<pair<int, int>>& frameList)
 	mFrameList = frameList;
 }
 
-void Animation::InitFrameByStartEnd(int startX, int startY, int endX, int endY, bool isReverse)
+void Animation::InitFrameByStartEnd(int startX, int startY, int endX, int endY, bool isReverse)	//필요하면 바꾸기
 {
-	for (int y = startY; y <= endY; ++y)
+	if (!isReverse)
 	{
-		for (int x = startX; x <= endX; ++x)
+		for (int y = startY; y <= endY; ++y)
 		{
-			mFrameList.push_back(make_pair(x, y));
+			for (int x = startX; x <= endX; ++x)
+			{
+				mFrameList.push_back(make_pair(x, y));
+			}
 		}
 	}
 

@@ -47,3 +47,9 @@ void GameEventManager::PushEvent(IEvent * event)
 	}
 	mEventQueue.push(event);
 }
+
+bool GameEventManager::IsPlaying()
+{
+	if (mEventQueue.empty())return false;
+	return true;
+}

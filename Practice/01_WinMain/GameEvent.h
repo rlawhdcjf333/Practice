@@ -10,6 +10,11 @@ public:
 	virtual bool Update() = 0;	//이벤트 업데이트 함수
 };
 
+class EndEvent : public IEvent
+{
+
+};
+
 class IChangeCameraTargetEvent : public IEvent
 {
 	class GameObject* mTarget;

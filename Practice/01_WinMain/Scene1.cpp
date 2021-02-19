@@ -13,7 +13,7 @@ void Scene1::Init()
 	BackGround* backGround = new BackGround("BackGround", 0,0);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Background, backGround);
 
-	Player* player1 = new Player("1", 400, 700);
+	Player* player1 = new Player("player", 400, 700);
 	ObjectManager::GetInstance()->AddObject(ObjectLayer::Player, player1);
 
 	Enemy* enemy[5];
@@ -22,7 +22,8 @@ void Scene1::Init()
 		enemy[i]->SetPlayer(player1);
 		ObjectManager::GetInstance()->AddObject(ObjectLayer::Enemy, enemy[i]);
 	}
-
+	npc = new NPC("npc", 0, 0);
+	ObjectManager::GetInstance()->AddObject(ObjectLayer::NPC, npc);
 
 	Camera* mCamera = new Camera();
 	mCamera->SetTarget(player1);
@@ -31,8 +32,7 @@ void Scene1::Init()
 
 	ObjectManager::GetInstance()->Init();
 
-	//GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
-	//GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player2));
+	
 	//GameEventManager::GetInstance()->PushEvent(new IDelayEvent(3.0f));
 	//GameEventManager::GetInstance()->PushEvent(new IChangeCameraTargetEvent(player1));
 }
@@ -46,7 +46,15 @@ void Scene1::Update()
 {
 	ObjectManager::GetInstance()->Update();
 	GameEventManager::GetInstance()->Update();
+
+	vector<GameObject*>mEL = ObjectManager::GetInstance()->GetObjectList(ObjectLayer::Enemy);
+	if (mEL.size() == 0)
+	{
+		GameEventManager::GetInstance()->PushEvent(new IDelayEvent(2.0f));
+
+	}
 }
+
 
 void Scene1::Render(HDC hdc)
 {

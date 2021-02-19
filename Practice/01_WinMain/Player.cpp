@@ -4,27 +4,19 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "GameEventManager.h"
 
-#include "Enemy.h"
 Player::Player(const string& name, float x, float y)
 	:GameObject(name)
 {
 	mX = x;
 	mY = y;
-	mHP = 3;
 }
 
 void Player::Init()
 {
 	IMAGEMANAGER->LoadFromFile(L"Player", Resources(L"Player.bmp"), 1215, 1080, 9, 8,true);
 	mImage = IMAGEMANAGER->FindImage(L"Player");
-
-	//HP UI
-	mHeart = new Animation();
-	mHeart->InitFrameByStartEnd(0,0,0,0, false);
-	mHeart->SetIsLoop(false);
-	mHeart->SetFrameUpdateTime(1.f);
-
 
 	//왼쪽 모션
 	mLeftIdleAnm = new Animation();
@@ -36,7 +28,7 @@ void Player::Init()
 	mLeftWalkAnm = new Animation();
 	mLeftWalkAnm->InitFrameByStartEnd(0, 6, 7, 6, false);
 	mLeftWalkAnm->SetIsLoop(true);
-	mLeftWalkAnm->SetFrameUpdateTime(0.2f);
+	mLeftWalkAnm->SetFrameUpdateTime(0.1f);
 
 	mLeftAttackAnm = new Animation();
 	mLeftAttackAnm->InitFrameByStartEnd(0, 2, 8, 2, false);
@@ -57,7 +49,7 @@ void Player::Init()
 	mRightWalkAnm = new Animation();
 	mRightWalkAnm->InitFrameByStartEnd(0, 7, 7, 7, false);
 	mRightWalkAnm->SetIsLoop(true);
-	mRightWalkAnm->SetFrameUpdateTime(0.2f);
+	mRightWalkAnm->SetFrameUpdateTime(0.1f);
 
 	mRightAttackAnm = new Animation();
 	mRightAttackAnm->InitFrameByStartEnd(0, 3, 8, 3, false);
@@ -75,6 +67,8 @@ void Player::Init()
 	mSizeX = mImage->GetFrameWidth();
 	mSizeY = mImage->GetFrameHeight();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mHitBox = mRect;
+	mAttackRect = RectMakeCenter(0,0,0,0);
 }
 
 void Player::Release()
@@ -87,207 +81,193 @@ void Player::Release()
 	SafeDelete(mRightWalkAnm);
 	SafeDelete(mRightAttackAnm);
 	SafeDelete(mRightDeathAnm);
-	SafeDelete(mHeart);
 }
 
 void Player::Update()
 {
-	//이동 및 이동 모션
-	if (Input::GetInstance()->GetKeyDown('D'))
+	if (!GameEventManager::GetInstance()->IsPlaying())
 	{
-		mCurrentAnm->Stop();
-		mCurrentAnm = mRightWalkAnm;
-		mCurrentAnm->Play();
-	}
-
-	if ((mCurrentAnm == mRightWalkAnm or mCurrentAnm == mRightAttackAnm )and Input::GetInstance()->GetKey('D')) {
-
-		float dtime = Time::GetInstance()->DeltaTime();
-		mX += dtime * 200.f;
-
-	}
-
-	if (mCurrentAnm == mRightWalkAnm and Input::GetInstance()->GetKeyUp('D'))
-	{
-		mCurrentAnm->Stop();
-		if (Input::GetInstance()->GetKey('A')) {
-			mCurrentAnm = mLeftWalkAnm;
-		}
-		else if(!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S')) mCurrentAnm = mRightIdleAnm;
-		mCurrentAnm->Play();
-	}
-
-	if (Input::GetInstance()->GetKeyDown('A'))
-	{
-		mCurrentAnm->Stop();
-		mCurrentAnm = mLeftWalkAnm;
-		mCurrentAnm->Play();
-	}
-
-	if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mLeftAttackAnm) and Input::GetInstance()->GetKey('A')) {
-
-		float dtime = Time::GetInstance()->DeltaTime();
-		mX -= dtime * 200.f;
-	}
-
-	if (mCurrentAnm == mLeftWalkAnm and Input::GetInstance()->GetKeyUp('A'))
-	{
-		mCurrentAnm->Stop();
-		if (Input::GetInstance()->GetKey('D')) {
-			mCurrentAnm = mRightWalkAnm;
-		}
-		else if (!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S'))mCurrentAnm = mLeftIdleAnm;
-		mCurrentAnm->Play();
-	}
-
-	if (Input::GetInstance()->GetKeyDown('W'))
-	{
-		mCurrentAnm->Stop();
-
-		if (mCurrentAnm == mLeftIdleAnm)
-			mCurrentAnm = mLeftWalkAnm;
-		else if (mCurrentAnm == mRightIdleAnm)
-			mCurrentAnm = mRightWalkAnm;
-
-		mCurrentAnm->Play();
-
-	}
-
-	if (Input::GetInstance()->GetKey('W')) {
-
-		float dtime = Time::GetInstance()->DeltaTime();
-		mY -= dtime * 200.f;
-	}
-
-	if ((mCurrentAnm==mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('W'))
-	{
-		if (Input::GetInstance()->GetKey('S')) { return; }
-		mCurrentAnm->Stop();
-
-		if(mCurrentAnm==mLeftWalkAnm)
-			mCurrentAnm = mLeftIdleAnm;
-		else if (mCurrentAnm == mRightWalkAnm)
-			mCurrentAnm = mRightIdleAnm;
-	
-		if (Input::GetInstance()->GetKey('A')) {mCurrentAnm = mLeftWalkAnm;}
-		if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm;}
-		mCurrentAnm->Play();
-	}
-
-
-	if (Input::GetInstance()->GetKeyDown('S'))
-	{
-		mCurrentAnm->Stop();
-
-		if (mCurrentAnm == mLeftIdleAnm)
-			mCurrentAnm = mLeftWalkAnm;
-		else if (mCurrentAnm == mRightIdleAnm)
-			mCurrentAnm = mRightWalkAnm;
-
-		mCurrentAnm->Play();
-
-	}
-
-	if (Input::GetInstance()->GetKey('S')) {
-
-		float dtime = Time::GetInstance()->DeltaTime();
-		mY += dtime * 200.f;
-	}
-
-	if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('S'))
-	{
-
-		if (Input::GetInstance()->GetKey('W')) { return; }
-		mCurrentAnm->Stop();
-
-		if (mCurrentAnm == mLeftWalkAnm)
-			mCurrentAnm = mLeftIdleAnm;
-		if (mCurrentAnm == mRightWalkAnm)
-			mCurrentAnm = mRightIdleAnm;
-
-		if (Input::GetInstance()->GetKey('A')) { mCurrentAnm = mLeftWalkAnm; }
-		if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm; }
-
-		mCurrentAnm->Play();
-	}
-
-	if (Input::GetInstance()->GetKeyDown(VK_SPACE))
-	{
-
-		if (mCurrentAnm == mLeftAttackAnm or mCurrentAnm == mRightAttackAnm) {
-			return;
-		}
-
-		mCurrentAnm->Stop();
-
-		if (mCurrentAnm == mLeftIdleAnm || mCurrentAnm == mLeftWalkAnm)
-			mCurrentAnm = mLeftAttackAnm;
-		else if (mCurrentAnm == mRightIdleAnm || mCurrentAnm == mRightWalkAnm)
-			mCurrentAnm = mRightAttackAnm;
-
-		mCurrentAnm->Stop();
-		mCurrentAnm->Play();
-
-	}
-	
-	//이동 모션
-	if (mCurrentAnm == mLeftAttackAnm and mCurrentAnm->GetNowFrameX() == 7) {
-
-		 mCurrentAnm = mLeftIdleAnm;
-		 mCurrentAnm->Play();
-
-		 if (Input::GetInstance()->GetKey('A')) {
-			mCurrentAnm->Stop();
-			mCurrentAnm = mLeftWalkAnm;
-			mCurrentAnm->Play();
-
-		 }
-
-	}
-
-
-	if (mCurrentAnm == mRightAttackAnm and mCurrentAnm->GetNowFrameX() == 7) {
-
-		mCurrentAnm = mRightIdleAnm;
-		mCurrentAnm->Play();
-
-		if (Input::GetInstance()->GetKey('D')) {
-		
-			mCurrentAnm->Stop();
-			mCurrentAnm = mRightWalkAnm;
-			mCurrentAnm->Play();
-		}
-
-	}
-
-	//피격 판정
-	//if ()
-
-	//사망 모션
-	if (mHP <= 0)
-	{
-		if (mLeftIdleAnm || mLeftAttackAnm || mLeftWalkAnm)
+		if (Input::GetInstance()->GetKeyDown('D'))
 		{
 			mCurrentAnm->Stop();
-			mCurrentAnm = mLeftDeathAnm;
+			mCurrentAnm = mRightWalkAnm;
 			mCurrentAnm->Play();
 		}
 
-		if (mRightIdleAnm || mRightAttackAnm || mRightWalkAnm)
+		if ((mCurrentAnm == mRightWalkAnm or mCurrentAnm == mRightAttackAnm) and Input::GetInstance()->GetKey('D')) {
+
+			float dtime = Time::GetInstance()->DeltaTime();
+			mX += dtime * 200.f;
+
+		}
+
+		if (mCurrentAnm == mRightWalkAnm and Input::GetInstance()->GetKeyUp('D'))
 		{
 			mCurrentAnm->Stop();
-			mCurrentAnm = mRightDeathAnm;
+			if (Input::GetInstance()->GetKey('A')) {
+				mCurrentAnm = mLeftWalkAnm;
+			}
+			else if (!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S')) mCurrentAnm = mRightIdleAnm;
 			mCurrentAnm->Play();
 		}
+
+		if (Input::GetInstance()->GetKeyDown('A'))
+		{
+			mCurrentAnm->Stop();
+			mCurrentAnm = mLeftWalkAnm;
+			mCurrentAnm->Play();
+		}
+
+		if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mLeftAttackAnm) and Input::GetInstance()->GetKey('A')) {
+
+			float dtime = Time::GetInstance()->DeltaTime();
+			mX -= dtime * 200.f;
+		}
+
+		if (mCurrentAnm == mLeftWalkAnm and Input::GetInstance()->GetKeyUp('A'))
+		{
+			mCurrentAnm->Stop();
+			if (Input::GetInstance()->GetKey('D')) {
+				mCurrentAnm = mRightWalkAnm;
+			}
+			else if (!Input::GetInstance()->GetKey('W') and !Input::GetInstance()->GetKey('S'))mCurrentAnm = mLeftIdleAnm;
+			mCurrentAnm->Play();
+		}
+
+		if (Input::GetInstance()->GetKeyDown('W'))
+		{
+			mCurrentAnm->Stop();
+
+			if (mCurrentAnm == mLeftIdleAnm)
+				mCurrentAnm = mLeftWalkAnm;
+			else if (mCurrentAnm == mRightIdleAnm)
+				mCurrentAnm = mRightWalkAnm;
+
+			mCurrentAnm->Play();
+
+		}
+
+		if (Input::GetInstance()->GetKey('W')) {
+
+			float dtime = Time::GetInstance()->DeltaTime();
+			mY -= dtime * 200.f;
+		}
+
+		if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('W'))
+		{
+			if (Input::GetInstance()->GetKey('S')) { return; }
+			mCurrentAnm->Stop();
+
+			if (mCurrentAnm == mLeftWalkAnm)
+				mCurrentAnm = mLeftIdleAnm;
+			else if (mCurrentAnm == mRightWalkAnm)
+				mCurrentAnm = mRightIdleAnm;
+
+			if (Input::GetInstance()->GetKey('A')) { mCurrentAnm = mLeftWalkAnm; }
+			if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm; }
+			mCurrentAnm->Play();
+		}
+
+
+		if (Input::GetInstance()->GetKeyDown('S'))
+		{
+			mCurrentAnm->Stop();
+
+			if (mCurrentAnm == mLeftIdleAnm)
+				mCurrentAnm = mLeftWalkAnm;
+			else if (mCurrentAnm == mRightIdleAnm)
+				mCurrentAnm = mRightWalkAnm;
+
+			mCurrentAnm->Play();
+
+		}
+
+		if (Input::GetInstance()->GetKey('S')) {
+
+			float dtime = Time::GetInstance()->DeltaTime();
+			mY += dtime * 200.f;
+		}
+
+		if ((mCurrentAnm == mLeftWalkAnm or mCurrentAnm == mRightWalkAnm) and Input::GetInstance()->GetKeyUp('S'))
+		{
+
+			if (Input::GetInstance()->GetKey('W')) { return; }
+			mCurrentAnm->Stop();
+
+			if (mCurrentAnm == mLeftWalkAnm)
+				mCurrentAnm = mLeftIdleAnm;
+			if (mCurrentAnm == mRightWalkAnm)
+				mCurrentAnm = mRightIdleAnm;
+
+			if (Input::GetInstance()->GetKey('A')) { mCurrentAnm = mLeftWalkAnm; }
+			if (Input::GetInstance()->GetKey('D')) { mCurrentAnm = mRightWalkAnm; }
+
+			mCurrentAnm->Play();
+		}
+
+		if (Input::GetInstance()->GetKeyDown(VK_SPACE))
+		{
+
+			if (mCurrentAnm == mLeftAttackAnm or mCurrentAnm == mRightAttackAnm) {
+				return;
+			}
+
+			mCurrentAnm->Stop();
+
+			if (mCurrentAnm == mLeftIdleAnm || mCurrentAnm == mLeftWalkAnm)
+				mCurrentAnm = mLeftAttackAnm;
+			else if (mCurrentAnm == mRightIdleAnm || mCurrentAnm == mRightWalkAnm)
+				mCurrentAnm = mRightAttackAnm;
+
+			mCurrentAnm->Stop();
+			mCurrentAnm->Play();
+
+		}
+
+		if (mCurrentAnm == mLeftAttackAnm and mCurrentAnm->GetNowFrameX() == 7) {
+
+			mCurrentAnm = mLeftIdleAnm;
+			mCurrentAnm->Play();
+
+			if (Input::GetInstance()->GetKey('A')) {
+				mCurrentAnm->Stop();
+				mCurrentAnm = mLeftWalkAnm;
+				mCurrentAnm->Play();
+
+			}
+
+		}
+
+
+		if (mCurrentAnm == mRightAttackAnm and mCurrentAnm->GetNowFrameX() == 7) {
+
+			mCurrentAnm = mRightIdleAnm;
+			mCurrentAnm->Play();
+
+			if (Input::GetInstance()->GetKey('D')) {
+
+				mCurrentAnm->Stop();
+				mCurrentAnm = mRightWalkAnm;
+				mCurrentAnm->Play();
+			}
+
+		}
 	}
+	
 
 	if (mRect.left < 0) { mX = mSizeX / 2; }
 	if (mRect.top < 0) { mY = mSizeY / 2; }
 	if (mRect.right > 2400) { mX = 2400 - (mSizeX / 2); }
 	if (mRect.bottom > 1600) { mY = 1600 - (mSizeY / 2); }
-
+	mHitBox = mRect;
 
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	if (mCurrentAnm == mLeftAttackAnm && mCurrentAnm->GetNowFrameX()>2 &&mCurrentAnm->GetNowFrameX()<6)
+		mAttackRect = RectMakeCenter(mX - 40, mY, 60, 50);
+	else if (mCurrentAnm == mRightAttackAnm && mCurrentAnm->GetNowFrameX() > 2 && mCurrentAnm->GetNowFrameX() < 6)
+		mAttackRect = RectMakeCenter(mX + 40, mY, 60, 50);
+	else
+		mAttackRect = RectMakeCenter(0,0,0,0);
 
 	mCurrentAnm->Update();
 }
@@ -296,6 +276,7 @@ void Player::Render(HDC hdc)
 {
 	CameraManager::GetInstance()->GetMainCamera()->FrameRender(hdc, mImage, mRect.left, mRect.top,mCurrentAnm->GetNowFrameX(),
 			mCurrentAnm->GetNowFrameY());
+	//CameraManager::GetInstance()->GetMainCamera()->RenderRect(hdc, mAttackRect);
 
 	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnm->GetNowFrameX(),mCurrentAnm->GetNowFrameY());
 }
