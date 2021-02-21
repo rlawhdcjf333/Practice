@@ -6,19 +6,13 @@ class Player : public GameObject
 {
 	Image* mImage;
 
-	Animation* mRightIdleAnm; // 0,1,7,1
-	Animation* mRightWalkAnm; // 0,7,7,7
-	Animation* mRightAttackAnm; // 0,3,8,3
-	Animation* mRightDeathAnm; // 0,5,5,5
-
-	Animation* mLeftIdleAnm; // 0,0,7,0
-	Animation* mLeftWalkAnm; //0,6,7,6
-	Animation* mLeftAttackAnm; //0,2,8,2
-	Animation* mLeftDeathAnm; // 0,4,5,4
-
+	map <wstring, Animation*> mAnimationList;
 	Animation* mCurrentAnm;
 
 	bool isDeath;
+
+	int mRandomIndexX;	//이미지 랜덤 변수
+	int mRandomIndexY;	//이미지 랜덤 변수
 public:
 	Player(const string& name,float x, float y);
 
